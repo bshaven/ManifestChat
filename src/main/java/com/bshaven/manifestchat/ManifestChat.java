@@ -15,6 +15,9 @@ public class ManifestChat extends JavaPlugin {
         // Register the /setprefix command with its executor
         getCommand("setprefix").setExecutor(new SetPrefix());
 
+        // Register the ChatListener to listen for player chat events
+        getServer().getPluginManager().registerEvents(new ChatListener(getConfig()), this);
+
         // Load configuration and other initialization tasks
         saveDefaultConfig();
     }

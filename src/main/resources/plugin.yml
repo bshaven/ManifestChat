@@ -2,3 +2,7 @@ name: ManifestChat
 version: '${project.version}'
 main: com.bshaven.manifestchat.ManifestChat
 api-version: '1.20'
+commands:
+  setprefix:
+    description: Set or modify player prefixes
+    usage: /setprefix <rank> <prefix>
