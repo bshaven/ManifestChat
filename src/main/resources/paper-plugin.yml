@@ -1,0 +1,4 @@
+name: ManifestChat
+version: '${project.version}'
+main: com.bshaven.manifestchat.ManifestChat
+api-version: '1.20'
