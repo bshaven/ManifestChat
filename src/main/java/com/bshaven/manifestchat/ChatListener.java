@@ -33,7 +33,15 @@ public class ChatListener implements Listener {
             }
         }
 
-        String message = rank + event.getMessage();
-        event.setMessage(message);
+        String message = event.getMessage();
+
+        // Modify the chat format for the event
+        String format = rank + player.getDisplayName() + ": " + message;
+
+        // Apply color formatting
+        format = ChatColor.translateAlternateColorCodes('&', format);
+
+        // Set the new chat format for the event
+        event.setFormat(format);
     }
 }
