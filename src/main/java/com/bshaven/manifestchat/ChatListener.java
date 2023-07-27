@@ -34,6 +34,6 @@ public class ChatListener implements Listener {
         }
 
         String message = rank + event.getMessage();
-        event.setFormat(message);
+        event.setMessage(message);
     }
 }

@@ -1,39 +1,59 @@
 package com.bshaven.manifestchat.commands;
 
 import com.bshaven.manifestchat.ManifestChat;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
+
+import java.io.File;
+import java.io.IOException;
 
 public class SetPrefix implements CommandExecutor {
-
     private final FileConfiguration config;
+    private final ManifestChat plugin;
 
-    public SetPrefix(FileConfiguration config) {
+    public SetPrefix(ManifestChat plugin, FileConfiguration config) {
         this.config = config;
+        this.plugin = plugin;
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            sender.sendMessage(ChatColor.RED + "This command can only be used by players.");
+        if (!sender.hasPermission("manifestchat.setprefix")) {
+            sender.sendMessage(ChatColor.RED + "You don't have permission to use this command.");
             return true;
         }
 
         if (args.length < 2) {
-            sender.sendMessage(ChatColor.RED + "Usage: /setprefix <rank> <prefix>");
+            sender.sendMessage(ChatColor.RED + "Usage: /setprefix <username> <group>");
             return true;
         }
 
-        String rank = args[0];
-        String prefix = ChatColor.translateAlternateColorCodes('&', args[1]);
+        String username = args[0];
+        String group = args[1];
 
-        config.set("prefixes." + rank, prefix);
-        sender.sendMessage(ChatColor.GREEN + "Prefix for rank '" + rank + "' set to: " + prefix);
+        // Check if the group is valid and exists in the configuration
+        if (!config.contains("prefixes." + group)) {
+            sender.sendMessage(ChatColor.RED + "Invalid group. Please use an existing group as the prefix.");
+            return true;
+        }
+
+        String prefix = config.getString("prefixes." + group);
+
+        // Save the custom prefix to the configuration
+        config.set("prefixes." + username, prefix);
+        sender.sendMessage(ChatColor.GREEN + "Prefix for player '" + username + "' set to: " + prefix);
+
+        // Save the configuration
+        saveConfig();
+
         return true;
     }
 
+    // Method to save the configuration
+    private void saveConfig() {
+        plugin.saveConfig();
+    }
 }
